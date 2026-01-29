@@ -1,0 +1,16 @@
+# Node
+node_modules/
+.env
+.env.*
+
+# Builds
+dist/
+build/
+.next/
+
+# Docker
+*.log
+
+# Editor / OS
+.vscode/
+.DS_Store
