@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import FormularioInscripcion from '../components/FormularioInscripcion';
+import './Tienda.css';
 
 export default function Tienda() {
   const [cursos, setCursos] = useState([]);
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
 
-  // Función para dar formato de moneda ($ 45.000)
+  
   const formatearPrecio = (valor) => {
     return new Intl.NumberFormat('es-AR', {
       style: 'currency',
@@ -26,9 +27,9 @@ export default function Tienda() {
       {cursos.map((curso) => (
         <article key={curso.id} className="curso-card">
           <div className="curso-image-container">
-            <img 
-              src={curso.imagen} 
-              alt={curso.nombre} 
+            <img
+              src={curso.imagen}
+              alt={curso.nombre}
               className="curso-image"
               referrerPolicy="no-referrer"
               style={{
@@ -44,27 +45,27 @@ export default function Tienda() {
             <h2>{curso.nombre}</h2>
             <p>{curso.descripcion}</p>
 
-            
-            <div className="precio-duracion">
+
+            <div className="card-bottom">
+              <span className="duracion">⏳ {curso.detalle}</span>
               <div className="precio-tag">
                 {formatearPrecio(curso.precio)}
               </div>
-              <span className="duracion">🕒 {curso.detalle}</span>
+
+              <button
+                className="btn-inscribirme"
+                onClick={() => setCursoSeleccionado(curso)}
+              >
+                Inscribirme
+              </button>
             </div>
-            
-            <button 
-              className="btn-inscribirme"
-              onClick={() => setCursoSeleccionado(curso)}
-            >
-              Inscribirme
-            </button>
           </div>
         </article>
       ))}
 
       {cursoSeleccionado && (
-        <FormularioInscripcion 
-          curso={cursoSeleccionado} 
+        <FormularioInscripcion
+          curso={cursoSeleccionado}
           onClose={() => setCursoSeleccionado(null)}
         />
       )}
