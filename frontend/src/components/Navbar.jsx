@@ -1,16 +1,34 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import './Navbar.css';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { BookOpen, GraduationCap, LayoutDashboard } from "lucide-react";
+import "./Navbar.css";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  const isActive = (path) => location.pathname === path;
+
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
       <div className="navbar-container">
         <div className="navbar-brand">
           <Link to="/" className="navbar-logo-link">
@@ -22,21 +40,45 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className={`menu-icon ${isOpen ? 'open' : ''}`} onClick={toggleMenu}>
+        <div
+          className={`menu-icon ${isOpen ? "open" : ""}`}
+          onClick={toggleMenu}
+          role="button"
+          aria-label="Menú de navegación"
+          aria-expanded={isOpen}
+        >
           <span></span>
           <span></span>
           <span></span>
         </div>
 
-        <ul className={`navbar-links ${isOpen ? 'active' : ''}`}>
+        <ul className={`navbar-links ${isOpen ? "active" : ""}`}>
           <li>
-            <Link to="/tienda" onClick={() => setIsOpen(false)}>Tienda</Link>
+            <Link
+              to="/tienda"
+              className={isActive("/tienda") ? "active-link" : ""}
+            >
+              <BookOpen size={18} />
+              Cursos
+            </Link>
           </li>
           <li>
-            <Link to="/mis-compras" onClick={() => setIsOpen(false)}>Mis Compras</Link>
+            <Link
+              to="/mis-compras"
+              className={isActive("/mis-compras") ? "active-link" : ""}
+            >
+              <GraduationCap size={18} />
+              Mis Inscripciones
+            </Link>
           </li>
           <li>
-            <Link to="/admin" onClick={() => setIsOpen(false)}>Admin IGA</Link>
+            <Link
+              to="/admin"
+              className={isActive("/admin") ? "active-link" : ""}
+            >
+              <LayoutDashboard size={18} />
+              Administrador
+            </Link>
           </li>
         </ul>
       </div>
